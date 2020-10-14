@@ -21,7 +21,7 @@ This will build `bin/gumdrop`.
 To build and install `gumdrop` at `/usr/local/bin/gumdrop` simply:
 
 ```shell script
-$ make install
+$ sudo make install
 ``` 
 
 ### Install Service
