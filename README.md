@@ -12,7 +12,7 @@ $ cd gumdrop
 $ make build
 ```
 
-This will build Linux and Windows executables in `bin`.
+This will build `bin/gumdrop`.
 
 ## Installing
 
