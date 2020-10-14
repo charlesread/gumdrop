@@ -1,0 +1,20 @@
+[Unit]
+Description=gumdrop (HTTP dropper)
+ConditionPathExists=/usr/local/bin/gumdrop
+After=network.target
+
+[Service]
+Type=simple
+User=gumdrop
+Group=gumdrop
+LimitNOFILE=1024
+Restart=on-failure
+RestartSec=10
+ExecStart=/usr/local/bin/gumdrop
+
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=gumdrop
+
+[Install]
+WantedBy=multi-user.target

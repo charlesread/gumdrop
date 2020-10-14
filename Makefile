@@ -1,22 +1,31 @@
 all: build
 
 build: clean
-	@echo "Building bin/gumdrop"
+	@echo "\n*** Building bin/gumdrop ***\n"
 	@go build -o bin/gumdrop gumdrop.go
 
 install: remove clean build
-	@echo "Moving binary to /usr/local/bin/gumdrop"
+	@echo "\n*** Moving binary to /usr/local/bin/gumdrop ***\n"
 	@mkdir -p /usr/local/bin
 	@cp bin/gumdrop /usr/local/bin/gumdrop
 	@chmod 755 /usr/local/bin/gumdrop
 
 service:
-	@echo "Coming soon..."
+	@echo "\n*** Copying unit file and enabling service ***\n"
+	cp gumdrop.service /etc/systemd/system/
+	systemctl enable gumdrop
+	systemctl start gumdrop
+	systemctl status gumdrop
 
 clean:
-	@echo "Removing bin/**"
+	@echo "\n*** Removing bin/** ***\n"
 	@rm -rf bin/**
 
 remove:
-	@echo "Removing /usr/local/bin/gumdrop"
-	@rm -rf /usr/local/bin/gumdrop
+	@echo "\n*** Removing components ***\n"
+	-rm -rf /usr/local/bin/gumdrop
+	-rm -f /etc/systemd/system/gumdrop.service
+	-systemctl stop gumdrop
+	-systemctl disable gumdrop
+	-systemctl daemon-reload
+	-systemctl reset-failed

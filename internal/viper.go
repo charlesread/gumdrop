@@ -1,8 +1,8 @@
 package internal
 
 import (
-	"fmt"
 	"github.com/spf13/viper"
+	"log"
 )
 
 func init() {
@@ -23,10 +23,11 @@ func init() {
 	viper.AddConfigPath(".")
 	viper.AddConfigPath("/etc/gumdrop")
 	viper.AddConfigPath("$HOME/.gumdrop")
+	viper.AddConfigPath("$HOME")
 
 	// process/read the config, panic if it doesn't work
 	err := viper.ReadInConfig() // Find and read the config file
 	if err != nil { // Handle errors reading the config file
-		panic(fmt.Errorf("Fatal error config file: %s \n", err))
+		log.Printf("Config file not found, default config being used: %v\n", err)
 	}
 }

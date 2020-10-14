@@ -26,7 +26,17 @@ $ make install
 
 ### Install Service
 
-`gumdrop` runs just fine from the command line, a `systemd` unit file is provided at `gumdrop.service` and can be automatically installed and enabled:
+`gumdrop` runs just fine from the command line, a `systemd` unit file is provided at `gumdrop.service`.
+
+The default service runs as the user `gumdrop`, be sure that user exists:
+
+```shell script
+$ useradd gumdrop -s /sbin/nologin -m
+$ cp config.yaml /home/gumdrop # copy over default config for convenience (optional)
+$ chown gumdrop:gumdrop /home/gumdrop/config.yaml
+```
+
+You can install the service with the `service` target:
 
 ```shell script
 $ make install
