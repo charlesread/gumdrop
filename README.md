@@ -52,6 +52,7 @@ This file can be placed in the following locations:
 * `.`
 * `/etc/gumdrop/`
 * `$HOME/.gumdrop/`
+* `$HOME`
 
 ### Passing Configuration Parameters
 
