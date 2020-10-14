@@ -61,10 +61,11 @@ Parameters may also be set/overridden via environment variables, `GUMDROP_ADDRES
 
 ### Parameters
 
-| Name | Default Value | Function |
-| ---- | ------------- | -------- |
-| `Address` | `:8080` | Sets the address where `gumdrop` will serve. |
-| `BaseDir` | `/opt/misc/drops` | The base directory where files will be dropped. |
+| Name | Type | Default Value | Function | Environment Variable Override |
+| ---- | ---- |-------------- | -------- | ----------------------------- |
+| `Address` | string | `:8080` | Sets the address where `gumdrop` will serve. | `GUMDROP_ADDRESS` |
+| `BaseDir` | string | `/opt/misc/drops` | The base directory where files will be dropped. | `GUMDROP_BASEDIR` |
+| `Tokens` | string array | `[superSecretToken someOtherEquallySuperSecretToken]` | Tokens allowed in `Authorization: bearer Token` header. | _not available_ | 
 
 
 ## Running
@@ -84,7 +85,7 @@ $ ./gumdrop
 ```shell script
 $ curl -v -X POST \
   -H "Content-Type: multipart/form-data" \
-  -H "Authorization: bearer abc123" \
+  -H "Authorization: bearer Token" \
   -H "x-directory: someDirectory" \
   -F file=@beep.txt \
   localhost:8080/drop

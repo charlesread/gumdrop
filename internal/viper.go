@@ -15,6 +15,8 @@ func init() {
 
 	viper.SetDefault("Address", ":8080")
 	viper.BindEnv("Address")
+
+	viper.SetDefault("Tokens", []string{"superSecretToken", "someOtherEquallySuperSecretToken"})
 	// end default configurations
 
 	// define config file parameters and locations to search

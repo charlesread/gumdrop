@@ -1,2 +1,5 @@
 Address: :8080
 BaseDir: /opt/misc/drops
+Tokens:
+  - 'superSecretToken'
+  - 'someOtherEquallySuperSecretToken'

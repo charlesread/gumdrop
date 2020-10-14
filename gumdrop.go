@@ -15,6 +15,7 @@ func main() {
 
 	log.Printf("Address: %q\n", viper.GetString("Address"))
 	log.Printf("BaseDir: %v\n", viper.GetString("BaseDir"))
+	log.Printf("Tokens: %v\n", viper.GetStringSlice("Tokens"))
 
 	server := &internal.Server{}
 	log.Fatal(http.ListenAndServe(viper.GetString("Address"), server))

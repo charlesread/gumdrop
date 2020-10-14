@@ -77,8 +77,12 @@ func requestIsValid(pr *processResult, r *http.Request) {
 }
 
 func validateToken(token string) bool {
-	// TODO: provide real implementation, likely an array in the config
-	return true
+	for _, v := range viper.GetStringSlice("Tokens") {
+		if v == token {
+			return true
+		}
+	}
+	return false
 }
 
 func writeFileHeader(h *multipart.FileHeader, pr *processResult) {
