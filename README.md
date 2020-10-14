@@ -10,6 +10,11 @@
 $ git clone https://github.com/charlesread/gumdrop.git
 $ cd gumdrop
 $ go run gumdrop.go
+2020/10/14 19:44:36 Starting `gumdrop`...
+2020/10/14 19:44:36 Address: ":8080"
+2020/10/14 19:44:36 BaseDir: .
+2020/10/14 19:44:36 Tokens: [superSecretToken someOtherEquallySuperSecretToken]
+...
 ```
 
 ## Building
