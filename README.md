@@ -112,7 +112,7 @@ Then:
 ```shell script
 $ sudo useradd gumdrop -s /sbin/nologin -m
 $ sudo cp config.yaml /home/gumdrop
-$ sudo chown gumdrop:gumdrop /home/gumdrop/config.yaml
+$ sudo chown gumdrop:gumdrop /home/gumdrop/config.yaml # edit appropriately
 $ cd /tmp
 $ git clone https://github.com/charlesread/gumdrop.git
 $ cd gumdrop
