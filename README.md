@@ -90,3 +90,32 @@ $ curl -v -X POST \
   -F file=@beep.txt \
   localhost:8080/drop
 ```
+
+## Removal
+
+```shell script
+$ sudo make remove
+```
+
+Or replicate the commands in the `remove` Makefile target.
+
+## The TL;DR Installation
+
+If you're on a `systemd` system, have:
+
+* `go`
+* `git`
+* `useradd`
+
+Then:
+
+```shell script
+$ sudo useradd gumdrop -s /sbin/nologin -m
+$ sudo cp config.yaml /home/gumdrop
+$ sudo chown gumdrop:gumdrop /home/gumdrop/config.yaml
+$ cd /tmp
+$ git clone https://github.com/charlesread/gumdrop.git
+$ cd gumdrop
+$ sudo make install
+$ sudo make service
+```
