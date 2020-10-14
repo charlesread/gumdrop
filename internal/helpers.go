@@ -77,6 +77,7 @@ func requestIsValid(pr *processResult, r *http.Request) {
 }
 
 func validateToken(token string) bool {
+	// TODO: provide real implementation, likely an array in the config
 	return true
 }
 
