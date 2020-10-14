@@ -9,7 +9,7 @@
 NOTE: This is a `go` application.  Please have `go` >= 1.15 installed before building.
 
 ```shell script
-$ git clone git@github.com:charlesread/gumdrop.git
+$ git clone https://github.com/charlesread/gumdrop.git
 $ cd gumdrop
 $ make build
 ```
@@ -41,6 +41,7 @@ You can install the service with the `service` target:
 ```shell script
 $ make install
 $ make service
+$ journalctl -u gumdrop
 ```
 
 ## Configuration
