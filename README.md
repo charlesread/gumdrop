@@ -16,8 +16,6 @@ This will build `bin/gumdrop`.
 
 ## Installing
 
-The repository includes a prebuilt `linux` (GOOS) `386` (GOARCH) executable at `bin/linux`, which can be installed anywhere you like.
-
 To build and install `gumdrop` at `/usr/local/bin/gumdrop` simply:
 
 ```shell script
