@@ -6,6 +6,8 @@
 
 ## Building
 
+NOTE: This is a `go` application.  Please have `go` >= 1.15 installed before building.
+
 ```shell script
 $ git clone git@github.com:charlesread/gumdrop.git
 $ cd gumdrop
