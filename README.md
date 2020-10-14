@@ -75,5 +75,5 @@ $ curl -v -X POST \
   -H "Authorization: bearer abc123" \
   -H "x-directory: someDirectory" \
   -F file=@beep.txt \
-  localhost:8090/drop
+  localhost:8080/drop
 ```
