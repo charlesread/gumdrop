@@ -40,8 +40,8 @@ Runtime configuration is done via a YAML file. This file must be named `config.y
 This file can be placed in the following locations:
 
 * `.`
-* `/etc/gumdrop/config.yaml`
-* `$HOME/.gumdrop`
+* `/etc/gumdrop/`
+* `$HOME/.gumdrop/`
 
 ### Passing Configuration Parameters
 
