@@ -7,7 +7,7 @@
 ## Building
 
 ```shell script
-$ git clone X
+$ git clone git@github.com:charlesread/gumdrop.git
 $ cd gumdrop
 $ make build
 ```
