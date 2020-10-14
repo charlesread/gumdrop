@@ -77,7 +77,7 @@ Parameters may also be set/overridden via environment variables, `GUMDROP_ADDRES
 | Name | Type | Default Value | Function | Environment Variable Override |
 | ---- | ---- |-------------- | -------- | ----------------------------- |
 | `Address` | string | `:8080` | Sets the address where `gumdrop` will serve. | `GUMDROP_ADDRESS` |
-| `BaseDir` | string | `/opt/misc/drops` | The base directory where files will be dropped. | `GUMDROP_BASEDIR` |
+| `BaseDir` | string | `.` | The base directory where files will be dropped. | `GUMDROP_BASEDIR` |
 | `Tokens` | string array | `[superSecretToken someOtherEquallySuperSecretToken]` | Tokens allowed in `Authorization: bearer Token` header. | _not available_ | 
 
 
