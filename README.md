@@ -74,7 +74,7 @@ Parameters may also be set/overridden via environment variables, `GUMDROP_ADDRES
 ```shell script
 $ ./gumdrop
 2020/10/14 14:56:45 Starting `gumdrop`...
-2020/10/14 14:56:45 Address: ":8090"
+2020/10/14 14:56:45 Address: ":8080"
 2020/10/14 14:56:45 BaseDir: /opt/misc/drops
 ...
 ```
