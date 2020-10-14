@@ -9,7 +9,7 @@ install: remove clean build
 	@echo "Moving binary to /usr/local/bin/gumdrop"
 	@mkdir -p /usr/local/bin
 	@cp bin/linux/gumdrop /usr/local/bin/gumdrop
-	@chmod 744 /usr/local/bin/gumdrop
+	@chmod 755 /usr/local/bin/gumdrop
 
 service:
 	@echo "Coming soon..."
