@@ -69,4 +69,11 @@ $ ./gumdrop
 
 ## Dropping Files
 
-Coming Soon.
+```shell script
+$ curl -v -X POST \
+  -H "Content-Type: multipart/form-data" \
+  -H "Authorization: bearer abc123" \
+  -H "x-directory: someDirectory" \
+  -F file=@beep.txt \
+  localhost:8090/drop
+```
