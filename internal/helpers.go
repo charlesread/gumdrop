@@ -32,14 +32,14 @@ func requestIsValid(pr *processResult, r *http.Request) {
 	}
 
 	// only the /drop path exists
-	if r.URL.String() != "/drop" {
-		setProcessResult(pr, nil, "Only the GET /drop endpoint exists.", false, http.StatusNotFound)
+	if r.URL.String() != "/" {
+		setProcessResult(pr, nil, "Only the POST / endpoint exists.", false, http.StatusNotFound)
 		return
 	}
 
 	// only POST is allowed
 	if r.Method != http.MethodPost {
-		setProcessResult(pr, nil, "Only the GET /drop endpoint exists.", false, http.StatusMethodNotAllowed)
+		setProcessResult(pr, nil, "Only the POST / endpoint exists.", false, http.StatusMethodNotAllowed)
 		return
 	}
 

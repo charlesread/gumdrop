@@ -4,6 +4,14 @@
 
 `gumdrop` is meant to provide a simple HTTP interface for dropping files onto a machine.  It's basically an FTP `PUT` operation when you don't have or want FTP.
 
+## A Quick Run
+
+```shell script
+$ git clone https://github.com/charlesread/gumdrop.git
+$ cd gumdrop
+$ go run gumdrop.go
+```
+
 ## Building
 
 NOTE: This is a `go` application.  Please have `go` >= 1.15 installed before building.
@@ -83,14 +91,15 @@ $ ./gumdrop
 ## Dropping Files
 
 ```shell script
+$ echo "some text" > someFile.txt
 $ curl -v -X POST \
   -H "Content-Type: multipart/form-data" \
-  -H "Authorization: bearer Token" \
+  -H "Authorization: bearer superSecretToken" \
   -H "x-directory: someDirectory" \
-  -F file=@beep.txt \
-  localhost:8080/drop
+  -F file=@someFile.txt \
+  localhost:8080
+$ rm someFile.txt
 ```
-
 ## Removal
 
 ```shell script
