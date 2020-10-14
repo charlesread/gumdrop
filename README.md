@@ -11,7 +11,7 @@ NOTE: This is a `go` application.  Please have `go` >= 1.15 installed before bui
 ```shell script
 $ git clone https://github.com/charlesread/gumdrop.git
 $ cd gumdrop
-$ make build
+$ sudo make build
 ```
 
 This will build `bin/gumdrop`.
@@ -31,17 +31,17 @@ $ make install
 The default service runs as the user `gumdrop`, be sure that user exists:
 
 ```shell script
-$ useradd gumdrop -s /sbin/nologin -m
-$ cp config.yaml /home/gumdrop # copy over default config for convenience (optional)
-$ chown gumdrop:gumdrop /home/gumdrop/config.yaml
+$ sudo useradd gumdrop -s /sbin/nologin -m
+$ sudo cp config.yaml /home/gumdrop # copy over default config for convenience (optional)
+$ sudo chown gumdrop:gumdrop /home/gumdrop/config.yaml
 ```
 
 You can install the service with the `service` target:
 
 ```shell script
-$ make install
-$ make service
-$ journalctl -u gumdrop
+$ sudo make install
+$ sudo make service
+$ sudo journalctl -u gumdrop
 ```
 
 ## Configuration
