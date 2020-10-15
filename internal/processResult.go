@@ -44,44 +44,44 @@ func (pr *processResult) requestIsValid(r *http.Request) {
 
 	// only the /drop path exists
 	if r.URL.String() != "/" {
-		setProcessResult(pr, nil, "Only the POST / endpoint exists.", false, http.StatusNotFound)
+		pr.setProcessResult(nil, "Only the POST / endpoint exists.", false, http.StatusNotFound)
 		return
 	}
 
 	// only POST is allowed
 	if r.Method != http.MethodPost {
-		setProcessResult(pr, nil, "Only the POST / endpoint exists.", false, http.StatusMethodNotAllowed)
+		pr.setProcessResult(nil, "Only the POST / endpoint exists.", false, http.StatusMethodNotAllowed)
 		return
 	}
 
 	// make sure Authorization header is present and valid
 	bearerHeader := r.Header.Get("Authorization")
 	if bearerHeader == "" {
-		setProcessResult(pr, nil, "No Authorization header set", false, http.StatusUnauthorized)
+		pr.setProcessResult(nil, "No Authorization header set", false, http.StatusUnauthorized)
 		return
 	}
 	if len(bearerHeader) < 8 {
-		setProcessResult(pr, nil, "Authorization header is malformed.", false, http.StatusUnauthorized)
+		pr.setProcessResult(nil, "Authorization header is malformed.", false, http.StatusUnauthorized)
 		return
 	}
 	token := bearerHeader[7:]
 	tokenValid := validateToken(token)
 	if tokenValid != true {
-		setProcessResult(pr, nil, "Invalid token.", false, http.StatusUnauthorized)
+		pr.setProcessResult(nil, "Invalid token.", false, http.StatusUnauthorized)
 		return
 	}
 
 	// get Content-Type header, returns "" if header does not exist
 	contentType := r.Header.Get("Content-type")
 	if contentType == "" {
-		setProcessResult(pr, nil, "Could not detect multipart/form-data Content-Type.", false, http.StatusBadRequest)
+		pr.setProcessResult(nil, "Could not detect multipart/form-data Content-Type.", false, http.StatusBadRequest)
 		return
 	}
 
 	// ensure that x-directory header exists
 	pr.directory = r.Header.Get("x-directory")
 	if pr.directory == "" {
-		setProcessResult(pr, nil, "x-directory header not sent.", false, http.StatusUnauthorized)
+		pr.setProcessResult(nil, "x-directory header not sent.", false, http.StatusUnauthorized)
 		return
 	}
 
@@ -96,7 +96,7 @@ func (pr *processResult) writeFileHeader(h *multipart.FileHeader) {
 		Log.Printf("temporaryFile closed, err: %v\n", err)
 	}()
 	if err != nil {
-		setProcessResult(pr, err, err.Error(), false, http.StatusInternalServerError)
+		pr.setProcessResult(err, err.Error(), false, http.StatusInternalServerError)
 		return
 	}
 
@@ -105,7 +105,7 @@ func (pr *processResult) writeFileHeader(h *multipart.FileHeader) {
 	err = os.MkdirAll(dir, 0755)
 	if err != nil {
 		Log.Printf("Error creating directory %q: %v\n", dir, err.Error())
-		setProcessResult(pr, err, err.Error(), false, http.StatusInternalServerError)
+		pr.setProcessResult(err, err.Error(), false, http.StatusInternalServerError)
 		return
 	}
 
@@ -120,7 +120,7 @@ func (pr *processResult) writeFileHeader(h *multipart.FileHeader) {
 	_, err = io.Copy(file, temporaryFile)
 	if err != nil {
 		msg := fmt.Sprintf("Failed to Copy file: %v", err.Error())
-		setProcessResult(pr, err, msg, false, http.StatusInternalServerError)
+		pr.setProcessResult(err, msg, false, http.StatusInternalServerError)
 		return
 	}
 
@@ -142,7 +142,7 @@ func (pr *processResult) saveFile(r *http.Request) {
 
 	// if there was a problem parsing the data let's just stop
 	if err != nil {
-		setProcessResult(pr, err, fmt.Sprintf("Failed to parse multipart message: %v", err.Error()), false, http.StatusBadRequest)
+		pr.setProcessResult(err, fmt.Sprintf("Failed to parse multipart message: %v", err.Error()), false, http.StatusBadRequest)
 		return
 	}
 
@@ -168,4 +168,15 @@ func (pr *processResult) writeProcessRequest(w http.ResponseWriter) {
 	if err != nil {
 		Log.Printf("Error writing response: %v\n", err.Error())
 	}
+}
+
+func (pr *processResult) setProcessResult(
+	err error,
+	msg string,
+	success bool,
+	statusCode int) {
+	pr.err = err
+	pr.msg = msg
+	pr.success = success
+	pr.statusCode = statusCode
 }
