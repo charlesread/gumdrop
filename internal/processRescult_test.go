@@ -35,7 +35,7 @@ func TestRequestIsValid(t *testing.T) {
 		pr := newProcessResult()
 		r := httptest.NewRequest("POST", "/a", nil)
 
-		want := 404
+		want := http.StatusNotFound
 		pr.requestIsValid(r)
 		if pr.statusCode != want {
 			t.Errorf("got %v, want %v", pr.statusCode, want)
@@ -60,7 +60,7 @@ func TestRequestIsValid(t *testing.T) {
 		pr := newProcessResult()
 		r := httptest.NewRequest("POST", "/", nil)
 
-		want := 401
+		want := http.StatusUnauthorized
 		pr.requestIsValid(r)
 		if pr.statusCode != want {
 			t.Errorf("got %v, want %v", pr.statusCode, want)
@@ -72,7 +72,7 @@ func TestRequestIsValid(t *testing.T) {
 		r := httptest.NewRequest("POST", "/", nil)
 		r.Header.Set("Authorization", "nope")
 
-		want := 401
+		want := http.StatusUnauthorized
 		pr.requestIsValid(r)
 		if pr.statusCode != want {
 			t.Errorf("got %v, want %v", pr.statusCode, want)
@@ -84,14 +84,14 @@ func TestRequestIsValid(t *testing.T) {
 		r := httptest.NewRequest("POST", "/", nil)
 		r.Header.Set("Authorization", "bearer WRONGTOKEN")
 
-		want := 401
+		want := http.StatusUnauthorized
 		pr.requestIsValid(r)
 		if pr.statusCode != want {
 			t.Errorf("got %v, want %v", pr.statusCode, want)
 		}
 	})
 
-	t.Run("correct token, but nothing else, should return 400", func(t *testing.T) {
+	t.Run("correct token, but nothing else, should return 400 and MSG_NO_MULTIPART", func(t *testing.T) {
 		InitViper()
 		viper.Set("LogFilePath", "/dev/null")
 		InitLogger()
@@ -99,10 +99,53 @@ func TestRequestIsValid(t *testing.T) {
 		r := httptest.NewRequest("POST", "/", nil)
 		r.Header.Set("Authorization", "bearer superSecretToken")
 
-		want := 400
+		want := http.StatusBadRequest
 		pr.requestIsValid(r)
 		if pr.statusCode != want {
 			t.Errorf("got %v, want %v", pr.statusCode, want)
+		}
+		if pr.msg != MSG_NO_MULTIPART {
+			t.Errorf("got %v, want %v", pr.msg, MSG_NO_MULTIPART)
+		}
+	})
+
+	t.Run("correct token, no x-directory header, 400 and MSG_NO_DIRECTORY", func(t *testing.T) {
+		InitViper()
+		viper.Set("LogFilePath", "/dev/null")
+		InitLogger()
+		pr := newProcessResult()
+		r := httptest.NewRequest("POST", "/", nil)
+		r.Header.Set("Authorization", "bearer superSecretToken")
+		r.Header.Set("Content-Type", "multipart/form-data")
+
+		want := http.StatusBadRequest
+		pr.requestIsValid(r)
+		if pr.statusCode != want {
+			t.Errorf("got %v, want %v", pr.statusCode, want)
+		}
+		if pr.msg != MSG_NO_DIRECTORY {
+			t.Errorf("got %v, want %v", pr.msg, MSG_NO_DIRECTORY)
+		}
+	})
+
+	t.Run("no file 400 and MSG_NO_DIRECTORY", func(t *testing.T) {
+		InitViper()
+		viper.Set("LogFilePath", "/dev/null")
+		InitLogger()
+		pr := newProcessResult()
+		r := httptest.NewRequest("POST", "/", nil)
+		r.Header.Set("Authorization", "bearer superSecretToken")
+		r.Header.Set("Content-Type", "multipart/form-data")
+		r.Header.Set("x-directory", "testdir")
+
+		want := http.StatusBadRequest
+		pr.requestIsValid(r)
+		pr.saveFiles(r)
+		if pr.statusCode != want {
+			t.Errorf("got %v, want %v", pr.statusCode, want)
+		}
+		if pr.msg != MSG_NO_FILE {
+			t.Errorf("got %v, want %v", pr.msg, MSG_NO_FILE)
 		}
 	})
 

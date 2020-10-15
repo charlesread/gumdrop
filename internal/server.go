@@ -19,7 +19,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	pr.baseDir = viper.GetString("BaseDir")
 
 	pr.requestIsValid(r)
-	pr.saveFile(r)
+	pr.saveFiles(r)
 
 	Log.Printf("Process Result: %v\n", *pr)
 

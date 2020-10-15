@@ -34,6 +34,39 @@ func newProcessResult() *processResult {
 	return pr
 }
 
+const (
+	MSG_NO_ROUTE       = "Only the POST / endpoint exists."
+	MSG_NO_MULTIPART   = "Could not detect multipart/form-data Content-Type."
+	MSG_NO_AUTH        = "No Authorization header set"
+	MSG_AUTH_MALFORMED = "Authorization header is malformed."
+	MSG_TOKEN_INVALID  = "Invalid token."
+	MSG_NO_DIRECTORY   = "x-directory header not sent."
+	MSG_NO_FILE        = "Request must have a `file` or mulriple `file`s."
+)
+
+// utility function to set values
+func (pr *processResult) setProcessResult(
+	err error,
+	msg string,
+	success bool,
+	statusCode int) {
+	pr.err = err
+	pr.msg = msg
+	pr.success = success
+	pr.statusCode = statusCode
+}
+
+func validateToken(token string) bool {
+	for _, v := range viper.GetStringSlice("Tokens") {
+		if v == token {
+			return true
+		}
+	}
+	return false
+}
+
+//---------
+
 // basic request validation, makes sure they're requesting the right endpoint, have the right method,
 // are authentic, et cetera, sure there are easier ways to do this, but this is a simple need
 func (pr *processResult) requestIsValid(r *http.Request) {
@@ -44,45 +77,70 @@ func (pr *processResult) requestIsValid(r *http.Request) {
 
 	// only the /drop path exists
 	if r.URL.String() != "/" {
-		pr.setProcessResult(nil, "Only the POST / endpoint exists.", false, http.StatusNotFound)
+		pr.setProcessResult(nil, MSG_NO_ROUTE, false, http.StatusNotFound)
 		return
 	}
 
 	// only POST is allowed
 	if r.Method != http.MethodPost {
-		pr.setProcessResult(nil, "Only the POST / endpoint exists.", false, http.StatusMethodNotAllowed)
+		pr.setProcessResult(nil, MSG_NO_ROUTE, false, http.StatusMethodNotAllowed)
 		return
 	}
 
 	// make sure Authorization header is present and valid
 	bearerHeader := r.Header.Get("Authorization")
 	if bearerHeader == "" {
-		pr.setProcessResult(nil, "No Authorization header set", false, http.StatusUnauthorized)
+		pr.setProcessResult(nil, MSG_NO_AUTH, false, http.StatusUnauthorized)
 		return
 	}
 	if len(bearerHeader) < 8 {
-		pr.setProcessResult(nil, "Authorization header is malformed.", false, http.StatusUnauthorized)
+		pr.setProcessResult(nil, MSG_AUTH_MALFORMED, false, http.StatusUnauthorized)
 		return
 	}
 	token := bearerHeader[7:]
 	tokenValid := validateToken(token)
 	if tokenValid != true {
-		pr.setProcessResult(nil, "Invalid token.", false, http.StatusUnauthorized)
+		pr.setProcessResult(nil, MSG_TOKEN_INVALID, false, http.StatusUnauthorized)
 		return
 	}
 
 	// get Content-Type header, returns "" if header does not exist
 	contentType := r.Header.Get("Content-type")
 	if contentType == "" {
-		pr.setProcessResult(nil, "Could not detect multipart/form-data Content-Type.", false, http.StatusBadRequest)
+		pr.setProcessResult(nil, MSG_NO_MULTIPART, false, http.StatusBadRequest)
 		return
 	}
 
 	// ensure that x-directory header exists
 	pr.directory = r.Header.Get("x-directory")
 	if pr.directory == "" {
-		pr.setProcessResult(nil, "x-directory header not sent.", false, http.StatusUnauthorized)
+		pr.setProcessResult(nil, MSG_NO_DIRECTORY, false, http.StatusBadRequest)
 		return
+	}
+
+}
+
+//---------
+
+// actually persist the file to the OS
+func (pr *processResult) saveFiles(r *http.Request) {
+
+	if pr.success != true {
+		return
+	}
+
+	err := r.ParseMultipartForm(1 << 62)
+
+	// if there was a problem parsing the data let's just stop
+	if err != nil {
+		Log.Printf("Failed to parse multipart message: %v", err.Error())
+		pr.setProcessResult(err, MSG_NO_FILE, false, http.StatusBadRequest)
+		return
+	}
+
+	// loop through all of the files (there can be more than one!) and save them permanently
+	for _, h := range r.MultipartForm.File["file"] {
+		pr.writeFileHeader(h)
 	}
 
 }
@@ -131,36 +189,15 @@ func (pr *processResult) writeFileHeader(h *multipart.FileHeader) {
 	pr.msg += fmt.Sprintf("%v persisted", writePath)
 }
 
-// actually persist the file to the OS
-func (pr *processResult) saveFile(r *http.Request) {
+//---------
+
+// actually write the response to the client
+func (pr *processResult) writeProcessRequest(w http.ResponseWriter) {
 
 	if pr.success != true {
 		return
 	}
 
-	err := r.ParseMultipartForm(1 << 62)
-
-	// if there was a problem parsing the data let's just stop
-	if err != nil {
-		pr.setProcessResult(err, fmt.Sprintf("Failed to parse multipart message: %v", err.Error()), false, http.StatusBadRequest)
-		return
-	}
-
-	// loop through all of the files (there can be more than one!) and save them permanently
-	for _, h := range r.MultipartForm.File["file"] {
-		pr.writeFileHeader(h)
-	}
-
-}
-
-// basic marshaller for a processResult, just "makes json"
-func (pr *processResult) createBody() string {
-	body := fmt.Sprintf("{\"message\":%q, \"success\": %v, \"statusCode\": %v}", pr.msg, pr.success, pr.statusCode)
-	return body
-}
-
-// actually write the response to the client
-func (pr *processResult) writeProcessRequest(w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(pr.statusCode)
 	body := pr.createBody()
@@ -170,13 +207,8 @@ func (pr *processResult) writeProcessRequest(w http.ResponseWriter) {
 	}
 }
 
-func (pr *processResult) setProcessResult(
-	err error,
-	msg string,
-	success bool,
-	statusCode int) {
-	pr.err = err
-	pr.msg = msg
-	pr.success = success
-	pr.statusCode = statusCode
+// basic marshaller for a processResult, just "makes json"
+func (pr *processResult) createBody() string {
+	body := fmt.Sprintf("{\"message\":%q, \"success\": %v, \"statusCode\": %v}", pr.msg, pr.success, pr.statusCode)
+	return body
 }
