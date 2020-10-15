@@ -2,10 +2,9 @@ package internal
 
 import (
 	"github.com/spf13/viper"
-	"log"
 )
 
-func init() {
+func InitViper() {
 	// allow `GUMDROP_*` environment variables
 	viper.SetEnvPrefix("gumdrop")
 
@@ -15,6 +14,9 @@ func init() {
 
 	viper.SetDefault("Address", ":8080")
 	viper.BindEnv("Address")
+
+	viper.SetDefault("LogFilePath", "")
+	viper.BindEnv("LogFilePath")
 
 	viper.SetDefault("Tokens", []string{"superSecretToken", "someOtherEquallySuperSecretToken"})
 	// end default configurations
@@ -30,6 +32,6 @@ func init() {
 	// process/read the config, panic if it doesn't work
 	err := viper.ReadInConfig() // Find and read the config file
 	if err != nil { // Handle errors reading the config file
-		log.Printf("Config file not found, default config being used: %v\n", err)
+		Log.Printf("Config file not found, default config being used: %v\n", err)
 	}
 }

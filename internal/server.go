@@ -2,7 +2,6 @@ package internal
 
 import (
 	"github.com/spf13/viper"
-	"log"
 	"net/http"
 )
 
@@ -14,14 +13,14 @@ type Server struct {
 // main request "handler"
 func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
-	log.Printf("Request received from %v for endpoint %v\n", r.RemoteAddr, r.URL)
+	Log.Printf("Request received from %v for endpoint %v\n", r.RemoteAddr, r.URL)
 
 	pr := newProcessResult()
 
 	requestIsValid(pr, r)
 	saveFile(pr, r)
 
-	log.Printf("Process Result: %v\n", *pr)
+	Log.Printf("Process Result: %v\n", *pr)
 
 	writeProcessRequest(pr, w)
 

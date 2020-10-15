@@ -78,6 +78,7 @@ Parameters may also be set/overridden via environment variables, `GUMDROP_ADDRES
 | ---- | ---- |-------------- | -------- | ----------------------------- |
 | `Address` | string | `:8080` | Sets the address where `gumdrop` will serve. | `GUMDROP_ADDRESS` |
 | `BaseDir` | string | `.` | The base directory where files will be dropped. | `GUMDROP_BASEDIR` |
+| `LogFilePath` | string | `""` | The location of the log file where you'd like to log. By default, `gumdrop` will log to `os.Stdout` (STDOUT). | `GUMDROP_LOGFILEPATH` |
 | `Tokens` | string array | `[superSecretToken someOtherEquallySuperSecretToken]` | Tokens allowed in `Authorization: bearer Token` header. | _not available_ | 
 
 

@@ -3,3 +3,4 @@ BaseDir: .
 Tokens:
   - 'superSecretToken'
   - 'someOtherEquallySuperSecretToken'
+#LogFilePath: '/some/log/file.log' # STDOUT if blank

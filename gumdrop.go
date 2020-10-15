@@ -3,21 +3,21 @@ package main
 import (
 	"github.com/charlesread/gumdrop/internal"
 	"github.com/spf13/viper"
-	"log"
 	"net/http"
 )
 
-func init() {
-	log.Printf("Starting `gumdrop`...")
-}
-
 func main() {
 
-	log.Printf("Address: %q\n", viper.GetString("Address"))
-	log.Printf("BaseDir: %v\n", viper.GetString("BaseDir"))
-	log.Printf("Tokens: %v\n", viper.GetStringSlice("Tokens"))
+	internal.InitViper()
+	internal.InitLogger()
+
+	internal.Log.Printf("Starting `gumdrop`...")
+	internal.Log.Printf("Address: %q\n", viper.GetString("Address"))
+	internal.Log.Printf("BaseDir: %v\n", viper.GetString("BaseDir"))
+	internal.Log.Printf("LogFilePath: %v\n", viper.GetString("LogFilePath"))
+	internal.Log.Printf("Tokens: %v\n", viper.GetStringSlice("Tokens"))
 
 	server := &internal.Server{}
-	log.Fatal(http.ListenAndServe(viper.GetString("Address"), server))
+	internal.Log.Fatal(http.ListenAndServe(viper.GetString("Address"), server))
 
 }

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/spf13/viper"
 	"io"
-	"log"
 	"mime/multipart"
 	"net/http"
 	"os"
@@ -91,7 +90,7 @@ func writeFileHeader(h *multipart.FileHeader, pr *processResult) {
 	temporaryFile, err := h.Open()
 	defer func() {
 		err := temporaryFile.Close()
-		log.Printf("temporaryFile closed, err: %v\n", err)
+		Log.Printf("temporaryFile closed, err: %v\n", err)
 	}()
 	if err != nil {
 		setProcessResult(pr, err, err.Error(), false, http.StatusInternalServerError)
@@ -102,18 +101,18 @@ func writeFileHeader(h *multipart.FileHeader, pr *processResult) {
 	dir := filepath.Join(viper.GetString("BaseDir"), pr.directory)
 	err = os.MkdirAll(dir, 0755)
 	if err != nil {
-		log.Printf("Error creating directory %q: %v\n", dir, err.Error())
+		Log.Printf("Error creating directory %q: %v\n", dir, err.Error())
 		setProcessResult(pr, err, err.Error(), false, http.StatusInternalServerError)
 		return
 	}
 
 	// actually write the temporaryFile to the directory
 	writePath := filepath.Join(viper.GetString("BaseDir"), pr.directory, h.Filename)
-	log.Printf("writePath: %v", writePath)
+	Log.Printf("writePath: %v", writePath)
 	file, err := os.Create(writePath)
 	defer func() {
 		err := file.Close()
-		log.Printf("file closed, err: %v\n", err)
+		Log.Printf("file closed, err: %v\n", err)
 	}()
 	_, err = io.Copy(file, temporaryFile)
 	if err != nil {
@@ -158,6 +157,6 @@ func writeProcessRequest(pr *processResult, w http.ResponseWriter) {
 	body := createBody(pr)
 	_, err := w.Write([]byte(body))
 	if err != nil {
-		log.Printf("Error writing response: %v\n", err.Error())
+		Log.Printf("Error writing response: %v\n", err.Error())
 	}
 }
