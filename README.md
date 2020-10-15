@@ -134,12 +134,12 @@ If you're on a `systemd` system, have:
 Then:
 
 ```shell script
+$ cd /tmp
+$ git clone https://github.com/charlesread/gumdrop.git
+$ cd gumdrop            
 $ sudo useradd gumdrop -s /sbin/nologin -m
 $ sudo cp config.yaml /home/gumdrop
 $ sudo chown gumdrop:gumdrop /home/gumdrop/config.yaml # edit appropriately
-$ cd /tmp
-$ git clone https://github.com/charlesread/gumdrop.git
-$ cd gumdrop
 $ sudo make install
 $ sudo make service
 ```
