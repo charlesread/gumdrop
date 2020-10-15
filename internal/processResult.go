@@ -129,7 +129,7 @@ func (pr *processResult) saveFiles(r *http.Request) {
 		return
 	}
 
-	err := r.ParseMultipartForm(1 << 62)
+	err := r.ParseMultipartForm(32 << 20)
 
 	// if there was a problem parsing the data let's just stop
 	if err != nil {
