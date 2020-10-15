@@ -1,6 +1,10 @@
 all: build
 
-build: clean
+test:
+	@echo "\n*** Running tests ***\n"
+	@go test -v ./...
+
+build: test clean
 	@echo "\n*** Building bin/gumdrop ***\n"
 	@go build -o bin/gumdrop gumdrop.go
 
