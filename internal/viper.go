@@ -29,9 +29,6 @@ func InitViper() {
 	viper.AddConfigPath("$HOME/.gumdrop")
 	viper.AddConfigPath("$HOME")
 
-	// process/read the config, panic if it doesn't work
-	err := viper.ReadInConfig() // Find and read the config file
-	if err != nil { // Handle errors reading the config file
-		Log.Printf("Config file not found, default config being used: %v\n", err)
-	}
+	// process/read the config
+	_ = viper.ReadInConfig() // Find and read the config file
 }

@@ -28,7 +28,7 @@ func newProcessResult() *processResult {
 		msg:        "",
 		success:    true,
 		statusCode: http.StatusCreated,
-		baseDir:    viper.GetString("BaseDir"),
+		baseDir:    "",
 		directory:  "",
 	}
 	return pr

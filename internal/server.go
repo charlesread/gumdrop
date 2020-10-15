@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"github.com/spf13/viper"
 	"net/http"
 )
 
@@ -15,6 +16,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	Log.Printf("Request received from %v for endpoint %v\n", r.RemoteAddr, r.URL)
 
 	pr := newProcessResult()
+	pr.baseDir = viper.GetString("BaseDir")
 
 	pr.requestIsValid(r)
 	pr.saveFile(r)
