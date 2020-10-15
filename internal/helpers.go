@@ -120,6 +120,12 @@ func writeFileHeader(h *multipart.FileHeader, pr *processResult) {
 		setProcessResult(pr, err, msg, false, http.StatusInternalServerError)
 		return
 	}
+
+	// append message to msg indicating success in persisting file
+	if len(pr.msg) != 0 {
+		pr.msg += ", "
+	}
+	pr.msg += fmt.Sprintf("%v persisted", writePath)
 }
 
 // actually persist the file to the OS

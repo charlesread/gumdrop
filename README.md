@@ -4,6 +4,15 @@
 
 `gumdrop` is meant to provide a simple HTTP interface for dropping files onto a machine.  It's basically an FTP `PUT` operation when you don't have or want FTP.
 
+Its API is simple:
+
+* A single `POST` endpoint at `/`, that returns `201` when successful
+  * Protected by `Authorization: bearer Token` (see parameters)
+  * Expects a `Content-Type: multipart/form-data`
+    * With a `file` property that contains the file to be uploaded
+  * Expects a `x-directory: someDirectory` header
+    * Such that `file` will be stored at `x-directory/file`
+
 ## A Quick Run
 
 ```shell script

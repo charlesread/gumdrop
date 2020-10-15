@@ -43,7 +43,7 @@ func newProcessResult() *processResult {
 		err:        nil,
 		msg:        "",
 		success:    true,
-		statusCode: http.StatusOK,
+		statusCode: http.StatusCreated,
 		baseDir:    viper.GetString("BaseDir"),
 		directory:  "",
 	}
