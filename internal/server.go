@@ -21,6 +21,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	Log.Printf("Process Result: %v\n", *pr)
 
-	writeProcessRequest(pr, w)
+	pr.writeProcessRequest(w)
 
 }

@@ -16,8 +16,6 @@ func setProcessResult(
 	pr.statusCode = statusCode
 }
 
-
-
 func validateToken(token string) bool {
 	for _, v := range viper.GetStringSlice("Tokens") {
 		if v == token {
