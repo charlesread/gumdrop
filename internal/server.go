@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"github.com/spf13/viper"
 	"net/http"
 )
 
@@ -17,35 +16,11 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	pr := newProcessResult()
 
-	requestIsValid(pr, r)
-	saveFile(pr, r)
+	pr.requestIsValid(r)
+	pr.saveFile(r)
 
 	Log.Printf("Process Result: %v\n", *pr)
 
 	writeProcessRequest(pr, w)
 
-}
-
-// struct to hold results of different processing stages
-type processResult struct {
-	err        error
-	msg        string
-	success    bool
-	statusCode int
-	baseDir    string
-	directory  string
-}
-
-// constructor function to make a "good" result by default, will be altered along the way and used to create
-// the ultimate response to the client
-func newProcessResult() *processResult {
-	pr := &processResult{
-		err:        nil,
-		msg:        "",
-		success:    true,
-		statusCode: http.StatusCreated,
-		baseDir:    viper.GetString("BaseDir"),
-		directory:  "",
-	}
-	return pr
 }
