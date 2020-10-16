@@ -69,6 +69,25 @@ $ sudo make service
 $ sudo journalctl -u gumdrop
 ```
 
+### Docker
+
+This repository includes a basic `Dockerfile` with `gumdrop` injected:
+
+```shell script
+$ docker build . -t gumdrop && \
+  docker run -it -p 8080:8080 --name gumdrop --rm gumdrop
+...  
+Successfully built 3bdc5897174c
+Successfully tagged gumdrop:latest
+2020/10/16 17:56:44 Starting `gumdrop`...
+2020/10/16 17:56:44 Address: ":8080"
+2020/10/16 17:56:44 BaseDir: .
+2020/10/16 17:56:44 FileMode: 644
+2020/10/16 17:56:44 LogFilePath: 
+2020/10/16 17:56:44 PathMode: 755
+2020/10/16 17:56:44 Tokens: [superSecretToken someOtherEquallySuperSecretToken]
+```
+
 Note that the service will run as the `gumdrop` user and has the working directory as `/home/gumdrop`, thus keeping the default value of `BaseDir` (`.`) will drop files to `/home/gumdrop`.
 
 ## Configuration
