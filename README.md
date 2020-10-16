@@ -90,10 +90,10 @@ Parameters may also be set/overridden via environment variables, `GUMDROP_ADDRES
 | ---- | ---- |-------------- | -------- | ----------------------------- |
 | `Address` | string | `:8080` | Sets the address where `gumdrop` will serve. | `GUMDROP_ADDRESS` |
 | `BaseDir` | string | `.` | The base directory where files will be dropped. | `GUMDROP_BASEDIR` |
-| `FileMode` | int (in octal) | 0644 | The file permissions, before umask, of the created file. | `GUMDROP_FILEMODE` |
+| `FileMode` | uint32 | 0644 (in octal) | The file permissions, before umask, of the created file. | `GUMDROP_FILEMODE` |
 | `LogFilePath` | string | `""` | The location of the log file where you'd like to log. By default, `gumdrop` will log to `os.Stdout` (STDOUT). | `GUMDROP_LOGFILEPATH` |
-| `PathMode` | int (in octal) | 0755 | The directory permissions, before umask, of the created file. | `GUMDROP_PATHMODE` |
-| `Tokens` | string array | `[superSecretToken someOtherEquallySuperSecretToken]` | Tokens allowed in `Authorization: bearer Token` header. | _not available_ | 
+| `PathMode` | uint32 | 0755 (in octal) | The directory permissions, before umask, of the created file. | `GUMDROP_PATHMODE` |
+| `Tokens` | []string | `[superSecretToken someOtherEquallySuperSecretToken]` | Tokens allowed in `Authorization: bearer Token` header. | _not available_ | 
 
 
 ## Running
