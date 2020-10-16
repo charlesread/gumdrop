@@ -139,6 +139,7 @@ If you're on a `systemd` system, have:
 * `go`
 * `git`
 * `useradd`
+* `make`
 
 Then:
 
