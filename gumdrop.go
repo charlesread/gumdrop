@@ -14,9 +14,9 @@ func main() {
 	internal.Log.Printf("Starting `gumdrop`...")
 	internal.Log.Printf("Address: %q\n", viper.GetString("Address"))
 	internal.Log.Printf("BaseDir: %v\n", viper.GetString("BaseDir"))
-	internal.Log.Printf("FileMode: %v\n", viper.GetString("FileMode"))
+	internal.Log.Printf("FileMode: %o\n", viper.GetUint32("FileMode"))
 	internal.Log.Printf("LogFilePath: %v\n", viper.GetString("LogFilePath"))
-	internal.Log.Printf("PathMode: %v\n", viper.GetString("PathMode"))
+	internal.Log.Printf("PathMode: %o\n", viper.GetUint32("PathMode"))
 	internal.Log.Printf("Tokens: %v\n", viper.GetStringSlice("Tokens"))
 
 	server := &internal.Server{}

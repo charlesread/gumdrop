@@ -19,10 +19,13 @@ Its API is simple:
 $ git clone https://github.com/charlesread/gumdrop.git
 $ cd gumdrop
 $ go run gumdrop.go
-2020/10/14 19:44:36 Starting `gumdrop`...
-2020/10/14 19:44:36 Address: ":8080"
-2020/10/14 19:44:36 BaseDir: .
-2020/10/14 19:44:36 Tokens: [superSecretToken someOtherEquallySuperSecretToken]
+2020/10/16 07:33:43 Starting `gumdrop`...
+2020/10/16 07:33:43 Address: ":8080"
+2020/10/16 07:33:43 BaseDir: .
+2020/10/16 07:33:43 FileMode: 644
+2020/10/16 07:33:43 LogFilePath: 
+2020/10/16 07:33:43 PathMode: 755
+2020/10/16 07:33:43 Tokens: [superSecretToken someOtherEquallySuperSecretToken]
 ...
 ```
 
@@ -99,9 +102,13 @@ Parameters may also be set/overridden via environment variables, `GUMDROP_ADDRES
 
 ```shell script
 $ ./gumdrop
-2020/10/14 14:56:45 Starting `gumdrop`...
-2020/10/14 14:56:45 Address: ":8080"
-2020/10/14 14:56:45 BaseDir: .
+2020/10/16 07:33:43 Starting `gumdrop`...
+2020/10/16 07:33:43 Address: ":8080"
+2020/10/16 07:33:43 BaseDir: .
+2020/10/16 07:33:43 FileMode: 644
+2020/10/16 07:33:43 LogFilePath: 
+2020/10/16 07:33:43 PathMode: 755
+2020/10/16 07:33:43 Tokens: [superSecretToken someOtherEquallySuperSecretToken]
 ...
 ```
 
