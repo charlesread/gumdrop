@@ -160,7 +160,7 @@ func (pr *processResult) writeFileHeader(h *multipart.FileHeader) {
 
 	// create directory where temporaryFile should be persisted
 	dir := filepath.Join(viper.GetString("BaseDir"), pr.directory)
-	err = os.MkdirAll(dir, 0755)
+	err = os.MkdirAll(dir, os.FileMode(viper.GetUint32("PathMode")))
 	if err != nil {
 		Log.Printf("Error creating directory %q: %v\n", dir, err.Error())
 		pr.setProcessResult(err, err.Error(), false, http.StatusInternalServerError)
@@ -171,6 +171,7 @@ func (pr *processResult) writeFileHeader(h *multipart.FileHeader) {
 	writePath := filepath.Join(viper.GetString("BaseDir"), pr.directory, h.Filename)
 	Log.Printf("writePath: %v", writePath)
 	file, err := os.Create(writePath)
+	_ = file.Chmod(os.FileMode(viper.GetUint32("FileMode")))
 	defer func() {
 		err := file.Close()
 		Log.Printf("file closed, err: %v\n", err)

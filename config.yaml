@@ -1,6 +1,8 @@
-Address: :8080
-BaseDir: .
+Address: ':8080'
+BaseDir: '.'
+FileMode: 0644 # expected to be octal
+#LogFilePath: '/some/log/file.log' # STDOUT if blank
 Tokens:
   - 'superSecretToken'
   - 'someOtherEquallySuperSecretToken'
-#LogFilePath: '/some/log/file.log' # STDOUT if blank
+PathMode: 0755 # expected to be octal

@@ -15,6 +15,12 @@ func InitViper() {
 	viper.SetDefault("Address", ":8080")
 	viper.BindEnv("Address")
 
+	viper.SetDefault("FileMode", 0644)
+	viper.BindEnv("FileMode")
+
+	viper.SetDefault("PathMode", 0755)
+	viper.BindEnv("PathMode")
+
 	viper.SetDefault("LogFilePath", "")
 	viper.BindEnv("LogFilePath")
 
