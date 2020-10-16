@@ -116,9 +116,11 @@ $ ./gumdrop
 
 ## Dropping Files
 
+A single file:
+
 ```shell script
 $ echo "some text" > someFile.txt
-$ curl -v -X POST \
+$ curl -X POST \
   -H "Content-Type: multipart/form-data" \
   -H "Authorization: bearer superSecretToken" \
   -H "x-directory: someDirectory" \
@@ -126,6 +128,21 @@ $ curl -v -X POST \
   localhost:8080
 $ rm someFile.txt
 ```
+
+A handful of files:
+
+```shell script
+curl -X POST \
+  -H "Content-Type: multipart/form-data" \
+  -H "Authorization: bearer superSecretToken" \
+  -H "x-directory: someDirectory" \
+  -F file=@someMassiveFile0.zip \
+  -F file=@someMassiveFile1.zip \
+  -F file=@someMassiveFile2.zip \
+  -F file=@someMassiveFile3.zip \
+  localhost:8080
+```
+
 ## Removal
 
 ```shell script
