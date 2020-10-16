@@ -69,6 +69,8 @@ $ sudo make service
 $ sudo journalctl -u gumdrop
 ```
 
+Note that the service will run as the `gumdrop` user and has the working directory as `/home/gumdrop`, thus keeping the default value of `BaseDir` (`.`) will drop files to `/home/gumdrop`.
+
 ## Configuration
 
 Runtime configuration is done via a YAML file. This file must be named `config.yaml`, a sample is in the repository root.
@@ -152,4 +154,15 @@ $ sudo cp config.yaml /home/gumdrop
 $ sudo chown gumdrop:gumdrop /home/gumdrop/config.yaml # edit appropriately
 $ sudo make install
 $ sudo make service
+```
+
+OR
+
+A simple shell script exists that will make the user, copy the default config to `/home/gumdrop`, install `gumdrop` and its `systemd` service, and start it (literally exactly what is above).
+
+```shell script
+$ cd /tmp
+$ git clone https://github.com/charlesread/gumdrop.git
+$ cd gumdrop   
+$ ./install.sh 
 ```
