@@ -132,7 +132,7 @@ $ rm someFile.txt
 A handful of files:
 
 ```shell script
-curl -X POST \
+$ curl -X POST \
   -H "Content-Type: multipart/form-data" \
   -H "Authorization: bearer superSecretToken" \
   -H "x-directory: someDirectory" \
