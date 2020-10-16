@@ -27,9 +27,9 @@ clean:
 
 remove:
 	@echo "\n*** Removing components ***\n"
-	-rm -rf /usr/local/bin/gumdrop
-	-rm -f /etc/systemd/system/gumdrop.service
 	-systemctl stop gumdrop
 	-systemctl disable gumdrop
+	-rm -rf /usr/local/bin/gumdrop
+	-rm -f /etc/systemd/system/gumdrop.service
 	-systemctl daemon-reload
 	-systemctl reset-failed
