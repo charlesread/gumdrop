@@ -1,6 +1,6 @@
 // +build integration
 
-package internal
+package integration_test
 
 import (
 	"net/http"
