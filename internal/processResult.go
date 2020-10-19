@@ -195,10 +195,6 @@ func (pr *processResult) writeFileHeader(h *multipart.FileHeader) {
 // actually write the response to the client
 func (pr *processResult) writeProcessRequest(w http.ResponseWriter) {
 
-	if pr.success != true {
-		return
-	}
-
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(pr.statusCode)
 	body := pr.createBody()

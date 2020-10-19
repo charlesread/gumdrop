@@ -39,7 +39,7 @@ integration:
 	@echo "\n*** Building containter ***\n"
 	-docker build . -t gumdrop_integration
 	@echo "\n*** Running container ***\n"
-	-docker run -d -p 8080:8888 --name gumdrop_integration --rm gumdrop_integration
-	go test -tags integration -v internal/integration_test.go
+	-docker run -d -p 8888:8080 --name gumdrop_integration --rm gumdrop_integration
+	-go test -tags integration -v internal/integration_test.go
 	@echo "\n*** Stopping container ***\n"
 	-docker stop gumdrop_integration
