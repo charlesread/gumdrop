@@ -1,9 +1,5 @@
 all: build
 
-test:
-	@echo "\n*** Running tests ***\n"
-	@go test -v ./...
-
 build: test clean
 	@echo "\n*** Building bin/gumdrop ***\n"
 	@go build -o bin/gumdrop gumdrop.go
@@ -37,9 +33,15 @@ remove:
 integration:
 	@echo "\n*** Beginning integration testing ***\n"
 	@echo "\n*** Building containter ***\n"
-	-docker build . -t gumdrop_integration
+	-docker build . -q -t gumdrop_integration
 	@echo "\n*** Running container ***\n"
 	-docker run -d -p 8888:8080 --name gumdrop_integration --rm gumdrop_integration
 	-go test -tags integration -v internal/integration_test/integration_test.go
 	@echo "\n*** Stopping container ***\n"
 	-docker stop gumdrop_integration
+
+test:
+	@echo "\n*** Running tests ***\n"
+	@go test -v ./...
+
+test_all: test integration
