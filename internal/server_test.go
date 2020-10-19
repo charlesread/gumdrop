@@ -17,7 +17,7 @@ func TestServer(t *testing.T) {
 
 		server := createServer(t)
 
-		if server == nil{
+		if server == nil {
 			t.Errorf("Server is nil")
 		}
 
