@@ -36,7 +36,8 @@ integration:
 	-docker build . -q -t gumdrop_integration
 	@echo "\n*** Running container ***\n"
 	-docker run -d -p 8888:8080 --name gumdrop_integration --rm gumdrop_integration
-	-go test -tags integration -v internal/integration_test/integration_test.go
+	# let's run the integration test _in_ the container
+	-docker exec -it gumdrop_integration /usr/local/go/bin/go test -tags integration -v internal/integration_test/integration_test.go
 	@echo "\n*** Stopping container ***\n"
 	-docker stop gumdrop_integration
 

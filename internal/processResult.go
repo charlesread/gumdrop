@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"errors"
 	"fmt"
 	"github.com/spf13/viper"
 	"io"
@@ -35,13 +36,23 @@ func newProcessResult() *processResult {
 }
 
 const (
-	MSG_NO_ROUTE       = "Only the POST / endpoint exists."
-	MSG_NO_MULTIPART   = "Could not detect multipart/form-data Content-Type."
-	MSG_NO_AUTH        = "No Authorization header set"
-	MSG_AUTH_MALFORMED = "Authorization header is malformed."
-	MSG_TOKEN_INVALID  = "Invalid token."
-	MSG_NO_DIRECTORY   = "x-directory header not sent."
-	MSG_NO_FILE        = "Request must have a `file` or mulriple `file`s."
+	MsgNoRoute       = "only the POST / endpoint exists"
+	MsgNoMultipart   = "could not detect multipart/form-data Content-Type"
+	MsgNoAuth        = "no Authorization header set"
+	MsgAuthMalformed = "authorization header is malformed"
+	MsgTokenInvalid  = "invalid token"
+	MsgNoDirectory   = "x-directory header not sent"
+	MsgNoFile        = "request must have a `file` or multiple `file`s"
+)
+
+var (
+	ErrNoRoute       = errors.New(MsgNoRoute)
+	ErrNoMultipart   = errors.New(MsgNoMultipart)
+	ErrNoAuth        = errors.New(MsgNoAuth)
+	ErrAuthMalformed = errors.New(MsgAuthMalformed)
+	ErrTokenInvalid  = errors.New(MsgTokenInvalid)
+	ErrNoDirectory   = errors.New(MsgNoDirectory)
+	ErrNoFile        = errors.New(MsgNoFile)
 )
 
 // utility function to set values
@@ -71,50 +82,50 @@ func validateToken(token string) bool {
 // are authentic, et cetera, sure there are easier ways to do this, but this is a simple need
 func (pr *processResult) requestIsValid(r *http.Request) {
 
-	if pr.success != true {
+	if pr.success != true || pr.err != nil {
 		return
 	}
 
 	// only the /drop path exists
 	if r.URL.String() != "/" {
-		pr.setProcessResult(nil, MSG_NO_ROUTE, false, http.StatusNotFound)
+		pr.setProcessResult(ErrNoRoute, ErrNoRoute.Error(), false, http.StatusNotFound)
 		return
 	}
 
 	// only POST is allowed
 	if r.Method != http.MethodPost {
-		pr.setProcessResult(nil, MSG_NO_ROUTE, false, http.StatusMethodNotAllowed)
+		pr.setProcessResult(ErrNoRoute, ErrNoRoute.Error(), false, http.StatusMethodNotAllowed)
 		return
 	}
 
 	// make sure Authorization header is present and valid
 	bearerHeader := r.Header.Get("Authorization")
 	if bearerHeader == "" {
-		pr.setProcessResult(nil, MSG_NO_AUTH, false, http.StatusUnauthorized)
+		pr.setProcessResult(ErrNoAuth, ErrNoAuth.Error(), false, http.StatusUnauthorized)
 		return
 	}
 	if len(bearerHeader) < 8 {
-		pr.setProcessResult(nil, MSG_AUTH_MALFORMED, false, http.StatusUnauthorized)
+		pr.setProcessResult(ErrAuthMalformed, ErrAuthMalformed.Error(), false, http.StatusUnauthorized)
 		return
 	}
 	token := bearerHeader[7:]
 	tokenValid := validateToken(token)
 	if tokenValid != true {
-		pr.setProcessResult(nil, MSG_TOKEN_INVALID, false, http.StatusUnauthorized)
+		pr.setProcessResult(ErrTokenInvalid, ErrTokenInvalid.Error(), false, http.StatusUnauthorized)
 		return
 	}
 
 	// get Content-Type header, returns "" if header does not exist
 	contentType := r.Header.Get("Content-type")
 	if contentType == "" {
-		pr.setProcessResult(nil, MSG_NO_MULTIPART, false, http.StatusBadRequest)
+		pr.setProcessResult(ErrNoMultipart, ErrNoMultipart.Error(), false, http.StatusBadRequest)
 		return
 	}
 
 	// ensure that x-directory header exists
 	pr.directory = r.Header.Get("x-directory")
 	if pr.directory == "" {
-		pr.setProcessResult(nil, MSG_NO_DIRECTORY, false, http.StatusBadRequest)
+		pr.setProcessResult(ErrNoDirectory, ErrNoDirectory.Error(), false, http.StatusBadRequest)
 		return
 	}
 
@@ -125,7 +136,7 @@ func (pr *processResult) requestIsValid(r *http.Request) {
 // actually persist the file to the OS
 func (pr *processResult) saveFiles(r *http.Request) {
 
-	if pr.success != true {
+	if pr.success != true || pr.err != nil {
 		return
 	}
 
@@ -134,7 +145,7 @@ func (pr *processResult) saveFiles(r *http.Request) {
 	// if there was a problem parsing the data let's just stop
 	if err != nil {
 		Log.Printf("Failed to parse multipart message: %v", err.Error())
-		pr.setProcessResult(err, MSG_NO_FILE, false, http.StatusBadRequest)
+		pr.setProcessResult(err, ErrNoFile.Error(), false, http.StatusBadRequest)
 		return
 	}
 

@@ -104,8 +104,8 @@ func TestRequestIsValid(t *testing.T) {
 		if pr.statusCode != want {
 			t.Errorf("got %v, want %v", pr.statusCode, want)
 		}
-		if pr.msg != MSG_NO_MULTIPART {
-			t.Errorf("got %v, want %v", pr.msg, MSG_NO_MULTIPART)
+		if pr.msg != MsgNoMultipart {
+			t.Errorf("got %v, want %v", pr.msg, MsgNoMultipart)
 		}
 	})
 
@@ -123,8 +123,8 @@ func TestRequestIsValid(t *testing.T) {
 		if pr.statusCode != want {
 			t.Errorf("got %v, want %v", pr.statusCode, want)
 		}
-		if pr.msg != MSG_NO_DIRECTORY {
-			t.Errorf("got %v, want %v", pr.msg, MSG_NO_DIRECTORY)
+		if pr.msg != MsgNoDirectory {
+			t.Errorf("got %v, want %v", pr.msg, MsgNoDirectory)
 		}
 	})
 
@@ -144,8 +144,8 @@ func TestRequestIsValid(t *testing.T) {
 		if pr.statusCode != want {
 			t.Errorf("got %v, want %v", pr.statusCode, want)
 		}
-		if pr.msg != MSG_NO_FILE {
-			t.Errorf("got %v, want %v", pr.msg, MSG_NO_FILE)
+		if pr.msg != MsgNoFile {
+			t.Errorf("got %v, want %v", pr.msg, MsgNoFile)
 		}
 	})
 

@@ -15,7 +15,7 @@ func assert(t *testing.T, got interface{}, want interface{}) {
 
 func TestIntegration(t *testing.T) {
 
-	baseUrl := "http://localhost:8888"
+	baseUrl := "http://localhost:8080"
 
 	t.Run("GET / should return 405", func(t *testing.T) {
 		req, _ := http.Get(baseUrl)
