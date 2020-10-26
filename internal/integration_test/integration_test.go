@@ -115,6 +115,23 @@ func TestIntegration(t *testing.T) {
 		got := resp.StatusCode
 		want := http.StatusCreated
 		assert(t, got, want)
+		
+		t.Run("file actually exists after successful posting", func(t *testing.T) {
+			f, err := os.Open("../../someDirectory/sampleUpload.csv")
+			if err != nil {
+				t.Errorf("file does not exist: %v", err.Error())
+			}
+			b , err := ioutil.ReadAll(f)
+			if err != nil {
+				t.Errorf("data could not be read: %v", err.Error())
+			}
+			want := `id, val
+1, a
+2, b
+3, c`
+			assert(t, string(b), want)
+		})
+		
 	})
 
 }
