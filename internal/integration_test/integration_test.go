@@ -125,11 +125,7 @@ func TestIntegration(t *testing.T) {
 			if err != nil {
 				t.Errorf("data could not be read: %v", err.Error())
 			}
-			want := `id, val
-1, a
-2, b
-3, c`
-			assert(t, string(b), want)
+			assert(t, string(b), string(data))
 		})
 		
 	})
