@@ -10,6 +10,20 @@ install: remove clean build
 	@cp bin/gumdrop /usr/local/bin/gumdrop
 	@chmod 755 /usr/local/bin/gumdrop
 
+dist:
+	-rm -r dist
+	GOOS=linux GOARCH=amd64 go build -o dist/linux_amd64/gumgrop gumdrop.go
+	GOOS=darwin GOARCH=amd64 go build -o dist/darwin_amd64/gumgrop gumdrop.go
+	GOOS=windows GOARCH=amd64 go build -o dist/windows_amd64/gumgrop.exe gumdrop.go
+	cp config.yaml dist/linux_amd64
+	cp config.yaml dist/darwin_amd64
+	cp config.yaml dist/windows_amd64
+ifdef v
+	cd dist && tar -czvf gumdrop-$(v).tar.gz --exclude=*.tar* .
+else
+	cd dist && tar -czvf gumdrop.tar.gz --exclude=*.tar* .
+endif
+
 service:
 	@echo "\n*** Copying unit file and enabling service ***\n"
 	cp gumdrop.service /etc/systemd/system/
