@@ -7,8 +7,8 @@
 Its API is simple:
 
 * A single `POST` endpoint at `/`, that returns `201` when successful
-  * Protected by `Authorization: bearer Token` (see parameters)
-  * Expects a `Content-Type: multipart/form-data`
+  * Protected by an `Authorization: bearer Token` header (see parameters)
+  * Expects a `Content-Type: multipart/form-data` header
     * With a `file` property that contains the file to be uploaded
   * Expects a `x-directory: someDirectory` header
     * Such that `file` will be stored at `x-directory/file`
