@@ -13,7 +13,7 @@ type Server struct {
 // main request "handler"
 func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
-	Log.Printf("Request received from %v for endpoint %v\n", r.RemoteAddr, r.URL)
+	Log.Printf("Request received from %v for endpoint %v %v\n", r.RemoteAddr, r.Method, r.URL)
 
 	pr := newProcessResult()
 	pr.baseDir = viper.GetString("BaseDir")

@@ -36,7 +36,7 @@ func newProcessResult() *processResult {
 }
 
 const (
-	MsgNoRoute       = "only the POST / endpoint exists"
+	MsgNoRoute       = "route does not exist"
 	MsgNoMultipart   = "could not detect multipart/form-data Content-Type"
 	MsgNoAuth        = "no Authorization header set"
 	MsgAuthMalformed = "authorization header is malformed"
@@ -86,48 +86,39 @@ func (pr *processResult) requestIsValid(r *http.Request) {
 		return
 	}
 
-	// only the /drop path exists
-	if r.URL.String() != "/" {
-		pr.setProcessResult(ErrNoRoute, ErrNoRoute.Error(), false, http.StatusNotFound)
-		return
+	validateErr := Validate(r)
+	var httpStatus int
+	var msg string
+	var success bool
+
+	switch validateErr {
+	case ErrNoRoute:
+		httpStatus = http.StatusNotFound
+	case ErrNoAuth:
+		httpStatus = http.StatusUnauthorized
+	case ErrAuthMalformed:
+		httpStatus = http.StatusUnauthorized
+	case ErrTokenInvalid:
+		httpStatus = http.StatusUnauthorized
+	case ErrNoMultipart:
+		httpStatus = http.StatusBadRequest
+	case ErrNoDirectory:
+		httpStatus = http.StatusBadRequest
+	default:
+		httpStatus = http.StatusCreated
 	}
 
-	// only POST is allowed
-	if r.Method != http.MethodPost {
-		pr.setProcessResult(ErrNoRoute, ErrNoRoute.Error(), false, http.StatusMethodNotAllowed)
-		return
+	if validateErr != nil {
+		msg = validateErr.Error()
+		success = false
+	} else {
+		msg = ""
+		success = true
 	}
 
-	// make sure Authorization header is present and valid
-	bearerHeader := r.Header.Get("Authorization")
-	if bearerHeader == "" {
-		pr.setProcessResult(ErrNoAuth, ErrNoAuth.Error(), false, http.StatusUnauthorized)
-		return
-	}
-	if len(bearerHeader) < 8 {
-		pr.setProcessResult(ErrAuthMalformed, ErrAuthMalformed.Error(), false, http.StatusUnauthorized)
-		return
-	}
-	token := bearerHeader[7:]
-	tokenValid := validateToken(token)
-	if tokenValid != true {
-		pr.setProcessResult(ErrTokenInvalid, ErrTokenInvalid.Error(), false, http.StatusUnauthorized)
-		return
-	}
-
-	// get Content-Type header, returns "" if header does not exist
-	contentType := r.Header.Get("Content-type")
-	if contentType == "" {
-		pr.setProcessResult(ErrNoMultipart, ErrNoMultipart.Error(), false, http.StatusBadRequest)
-		return
-	}
-
-	// ensure that x-directory header exists
 	pr.directory = r.Header.Get("x-directory")
-	if pr.directory == "" {
-		pr.setProcessResult(ErrNoDirectory, ErrNoDirectory.Error(), false, http.StatusBadRequest)
-		return
-	}
+
+	pr.setProcessResult(validateErr, msg, success, httpStatus)
 
 }
 

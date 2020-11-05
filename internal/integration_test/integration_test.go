@@ -12,6 +12,7 @@ import (
 )
 
 func assert(t *testing.T, got interface{}, want interface{}) {
+	t.Helper()
 	if got != want {
 		t.Errorf("got %v, want %v", got, want)
 	}
@@ -24,7 +25,7 @@ func TestIntegration(t *testing.T) {
 	t.Run("GET / should return 405", func(t *testing.T) {
 		req, _ := http.Get(baseUrl)
 		got := req.StatusCode
-		want := http.StatusMethodNotAllowed
+		want := http.StatusNotFound
 		assert(t, got, want)
 	})
 
@@ -109,7 +110,10 @@ func TestIntegration(t *testing.T) {
 		req.Header.Set("x-directory", "someDirectory")
 		req.Header.Add("Content-Type", writer.FormDataContentType())
 		client := http.Client{}
-		resp, _ := client.Do(req)
+		resp, err := client.Do(req)
+		if err != nil {
+			t.Fatal(err)
+		}
 		//b, _ := ioutil.ReadAll(resp.Body)
 		//fmt.Printf("%s\n", b)
 		got := resp.StatusCode
